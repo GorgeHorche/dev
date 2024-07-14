@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .text-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text Generator</h1>
+    <input type="number" id="requestCount" min="1" max="10" value="1">
+    <button id="generateButton">Generate Text</button>
+    <div id="results"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const generateButton = document.getElementById('generateButton');
+            const requestCount = document.getElementById('requestCount');
+            const results = document.getElementById('results');
+
+            generateButton.addEventListener('click', async () => {
+                const count = parseInt(requestCount.value);
+                results.innerHTML = '';
+
+                for (let i = 0; i < count; i++) {
+                    try {
+                        const response = await fetch('/api/getText');
+                        const text = await response.text();
+                        const box = document.createElement('div');
+                        box.className = 'text-box';
+                        box.textContent = text;
+                        results.appendChild(box);
+                    } catch (error) {
+                        console.error('Error fetching text:', error);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
